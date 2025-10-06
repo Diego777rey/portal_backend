@@ -1,0 +1,17 @@
+type Mutation{
+    saveCategoria(inputCategoria: InputCategoria!): Categoria
+    updateCategoria(id: ID!, inputCategoria: InputCategoria!): Categoria
+    deleteCategoria(id: ID!): Categoria
+
+    saveCliente(inputCliente: InputCliente!): Cliente
+    updateCliente(id: ID!, inputCliente: InputCliente!): Cliente
+    deleteCliente(id: ID!): Cliente
+
+    savePedido(inputPedido: InputPedido!): Pedido
+    updatePedido(id: ID!, inputPedido: InputPedido!): Pedido
+    deletePedido(id: ID!): Pedido
+
+    createProducto(inputProducto: InputProducto!): Producto
+    updateProducto(id: ID!, inputProducto: InputProducto!): Producto
+    deleteProducto(id: ID!): Producto
+}

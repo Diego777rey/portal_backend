@@ -1,0 +1,62 @@
+# --- Tipos ---
+type Pedido {
+    id: ID!
+    fechaPedido: String!
+    total: Float
+    estado: String!
+    cliente: Cliente
+    numeroMesa: Float
+    observaciones: String
+    horaEstimadaEntrega: String
+    paraLlevar: Boolean!
+    items: [PedidoItem!]!
+}
+
+type PedidoItem {
+    id: ID!
+    pedido: Pedido!
+    producto: Producto!
+    cantidad: Int!
+    precioUnitario: Float!
+    subtotal: Float!
+    observaciones: String
+}
+
+# --- Inputs para crear/actualizar ---
+input InputPedidoItem {
+    pedidoId: ID!
+    productoId: ID!
+    cantidad: Int!
+    precioUnitario: Float!
+    subtotal: Float!
+    observaciones: String
+}
+
+input InputPedido {
+    fechaPedido: String!
+    total: Float
+    estado: String!
+    clienteId: ID
+    numeroMesa: Float
+    observaciones: String
+    horaEstimadaEntrega: String
+    paraLlevar: Boolean!
+    items: [InputPedidoItem!]!
+}
+
+# --- Paginadores ---
+type PaginadorPedido {
+    items: [Pedido!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}
+
+type PaginadorPedidoItem {
+    items: [PedidoItem!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}

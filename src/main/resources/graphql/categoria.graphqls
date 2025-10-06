@@ -1,0 +1,16 @@
+type Categoria{
+    id: ID!
+    nombre: String!
+    categoriaEstado: String!
+}
+input InputCategoria {
+    nombre: String!
+    categoriaEstado: String!
+}
+type PaginadorCategoria {
+    items: [Categoria!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+    itemsCount: Int!
+}

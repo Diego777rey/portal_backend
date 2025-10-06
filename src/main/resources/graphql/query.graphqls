@@ -1,0 +1,24 @@
+type Query{
+    findCategoriaById(categoriaId: ID!): Categoria
+    findAllCategorias: [Categoria]
+    findCategoriasPaginated(page: Int!, size: Int!, search: String): PaginadorCategoria
+
+    findClienteById(clienteId: ID!): Cliente
+    findAllClientes: [Cliente]
+    findClientesPaginated(page: Int!, size: Int!, search: String): PaginadorCliente
+
+    findProductoById(productoId: ID!): Producto
+    findAllProductos: [Producto]
+    findProductosPaginated(page: Int!, size: Int!, search: String): PaginadorProducto
+
+    findPedidoById(id: ID!): Pedido
+    findAllPedidos: [Pedido!]!
+    findPedidosPaginated(page: Int!, size: Int!, search: String): PaginadorPedido
+}
+type Subscription  {
+    findAllCategoriasFlux: [Categoria]
+    findOneCategoriaMono(id: ID!): Categoria
+
+    findAllClientesFlux: [Cliente]
+    findOneClienteMono(id: ID!): Cliente
+}
