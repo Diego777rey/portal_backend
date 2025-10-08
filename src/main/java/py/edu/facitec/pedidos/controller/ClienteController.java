@@ -6,9 +6,12 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.stereotype.Controller;
+import py.edu.facitec.pedidos.dto.AuthPayload;
+import py.edu.facitec.pedidos.dto.LoginInput;
 import py.edu.facitec.pedidos.dto.PaginadorDto;
 import py.edu.facitec.pedidos.entity.Cliente;
 import py.edu.facitec.pedidos.service.ClienteService;
+import py.edu.facitec.pedidos.service.JwtService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -19,15 +22,21 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    // --- Consultas ---
     @QueryMapping
     public List<Cliente> findAllClientes() {
         return clienteService.findAllClientes();
     }
 
     @QueryMapping
-    public Cliente findClienteById(long clienteId) {
+    public Cliente findClienteById(@Argument("clienteId") long clienteId) {
         return clienteService.findOneCliente(clienteId);
     }
+
     @QueryMapping
     public PaginadorDto<Cliente> findClientesPaginated(
             @Argument("page") int page,
@@ -37,6 +46,7 @@ public class ClienteController {
         return clienteService.findClientesPaginated(page, size, search);
     }
 
+    // --- Mutaciones CRUD ---
     @MutationMapping
     public Cliente saveCliente(@Argument("inputCliente") Cliente inputCliente) {
         return clienteService.saveCliente(inputCliente);
@@ -44,7 +54,7 @@ public class ClienteController {
 
     @MutationMapping
     public Cliente updateCliente(@Argument("id") long id,
-                                     @Argument("inputCliente") Cliente inputCliente) {
+                                 @Argument("inputCliente") Cliente inputCliente) {
         return clienteService.updateCliente(id, inputCliente);
     }
 
@@ -52,6 +62,16 @@ public class ClienteController {
     public Cliente deleteCliente(@Argument("id") Long id) {
         return clienteService.deleteCliente(id);
     }
+
+    // --- Login por teléfono ---
+    @MutationMapping
+    public AuthPayload login(@Argument("input") LoginInput input) {
+        return clienteService.login(input.getTelefono())
+                .map(cliente -> new AuthPayload(cliente, jwtService.generateToken(cliente), null))
+                .orElseGet(() -> new AuthPayload(null, null, "Este número no está registrado"));
+    }
+
+    // --- Subscriptions ---
     @SubscriptionMapping
     public Flux<Cliente> findAllClientesFlux() {
         return clienteService.findAllClientesFlux();

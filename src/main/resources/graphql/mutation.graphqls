@@ -7,6 +7,9 @@ type Mutation{
     updateCliente(id: ID!, inputCliente: InputCliente!): Cliente
     deleteCliente(id: ID!): Cliente
 
+
+    login(input: LoginInput!): AuthPayload!
+
     savePedido(inputPedido: InputPedido!): Pedido
     updatePedido(id: ID!, inputPedido: InputPedido!): Pedido
     deletePedido(id: ID!): Pedido

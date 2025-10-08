@@ -11,30 +11,38 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class ClienteService {
+
     @Autowired
     private PaginadorService paginadorService;
+
     @Autowired
     private ClienteRepository clienteRepository;
+
     public List<Cliente> findAllClientes() {
         return clienteRepository.findAll();
     }
+
     public Cliente findOneCliente(Long id) {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente con id " + id + " no existe"));
     }
+
     public Flux<Cliente> findAllClientesFlux() {
         return Flux.fromIterable(findAllClientes())
-                .delayElements(Duration.ofSeconds(1)) // emite uno cada segundo
+                .delayElements(Duration.ofSeconds(1))
                 .take(10);
     }
+
     public Mono<Cliente> findOneMono(Long id) {
         return Mono.justOrEmpty(clienteRepository.findById(id))
                 .switchIfEmpty(Mono.error(new RuntimeException("Cliente con id " + id + " no existe")));
     }
+
     public Cliente saveCliente(Cliente dto) {
         if (dto == null) {
             throw new IllegalArgumentException("El objeto Cliente no puede ser nulo");
@@ -52,6 +60,7 @@ public class ClienteService {
 
         return clienteRepository.save(cliente);
     }
+
     public Cliente updateCliente(Long id, Cliente dto) {
         if (dto == null) {
             throw new IllegalArgumentException("El objeto Cliente no puede ser nulo");
@@ -62,21 +71,23 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Cliente con id " + id + " no existe"));
 
         cliente.setNombre(dto.getNombre());
-               cliente.setApellido(dto.getApellido());
-                cliente.setDireccion(dto.getDireccion());
-                cliente.setTelefono(dto.getTelefono());
-                cliente.setEmail(dto.getEmail());
-                cliente.setDocumento(dto.getDocumento());
+        cliente.setApellido(dto.getApellido());
+        cliente.setDireccion(dto.getDireccion());
+        cliente.setTelefono(dto.getTelefono());
+        cliente.setEmail(dto.getEmail());
+        cliente.setDocumento(dto.getDocumento());
 
         return clienteRepository.save(cliente);
     }
+
     public Cliente deleteCliente(Long id) {
-        Cliente Cliente = clienteRepository.findById(id)
+        Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente con id " + id + " no existe"));
 
-        clienteRepository.delete(Cliente);
-        return Cliente;
+        clienteRepository.delete(cliente);
+        return cliente;
     }
+
     public PaginadorDto<Cliente> findClientesPaginated(int page, int size, String search) {
         return paginadorService.paginarConFiltro(
                 (s, pageable) -> {
@@ -91,6 +102,10 @@ public class ClienteService {
         );
     }
 
+    // --- Login solo por teléfono ---
+    public Optional<Cliente> login(String telefono) {
+        return clienteRepository.findByTelefono(telefono);
+    }
 
     private void validarCamposObligatorios(Cliente dto) {
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {

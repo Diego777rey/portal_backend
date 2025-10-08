@@ -1,4 +1,4 @@
-package py.edu.facitec.pedidos.config;
+/*package py.edu.facitec.pedidos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,4 +21,4 @@ public class GraphqlConfig {
             }
         };
     }
-}
+}*/

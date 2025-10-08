@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClienteRepository extends JpaRepository<Cliente,Long> {
-    Optional<Cliente> findByNombre(String descripcion);
-    Page<Cliente> findByNombreContainingIgnoreCase(String descripcion, Pageable pageable);
+    Optional<Cliente> findByTelefono(String telefono);
+    Optional<Cliente> findByNombre(String nombre);
+    Page<Cliente> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
     @Query("SELECT c FROM Cliente c " +
             "WHERE (:nombre IS NULL OR c.nombre LIKE %:nombre%) ")//aca realizamos una consulta y filtramos por nombre
-    List<Cliente> findByFiltros(String descripcion);
+    List<Cliente> findByFiltros(String nombre);
 }

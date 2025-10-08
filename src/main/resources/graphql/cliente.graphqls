@@ -22,3 +22,13 @@ type PaginadorCliente {
     currentPage: Int!
     itemsCount: Int!
 }
+# Input para login
+input LoginInput {
+    telefono: String!
+}
+
+# Payload que devuelve el token y los datos del cliente
+type AuthPayload {
+    token: String!
+    cliente: Cliente!
+}
